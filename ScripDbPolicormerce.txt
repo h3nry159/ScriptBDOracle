@@ -1,0 +1,139 @@
+create table ESTADO(
+id_estado int not null,
+estado char not null,
+descripcion_estado varchar(200) not null,
+cod_estado varchar(5) not null,
+CONSTRAINT PK_ESTADO primary key (id_estado)
+);
+create table ROL(
+id_rol int not null,
+tipo_rol varchar(50)not null,
+descripcion_rol varchar(200)not null,
+cod_rol varchar(5)not null,
+CONSTRAINT PK_ROL PRIMARY KEY(id_rol)
+);
+create table DEPARTAMENTO(
+id_departamento int not null,
+nombre_departamento varchar(200)not null,
+CONSTRAINT PK_DEPARTAMENTO PRIMARY KEY(id_departamento)
+);
+create table MUNICIPIOS(
+id_municipios int not null,
+nombre_municipios varchar(200) not null,
+id_departamento_municipio int not null,
+CONSTRAINT PK_MUNICIPIO PRIMARY KEY (id_municipios),
+CONSTRAINT FK_DEPARTAMENTO FOREIGN KEY (id_departamento_municipio) REFERENCES DEPARTAMENTO(id_departamento)
+);
+CREATE TABLE TELEFONO(
+id_telefono int not null,
+telefono varchar(20) not null,
+CONSTRAINT id_telefono primary  key(id_telefono)
+);
+create table CATEGORIA(
+id_categoria int not null,
+nombre_categoria varchar(200)not null,
+descripcion varchar(200)not null,
+codigo_categoria varchar(3)not null,
+CONSTRAINT PK_CATEGORIA PRIMARY KEY (id_categoria)
+);
+CREATE TABLE DIRECCIONES(
+id_direccion int not null,
+direccion varchar(200)not null,
+id_departamento_direccion int not null,
+id_municipio_direccion int  not null,
+CONSTRAINT PK_DIRECCION PRIMARY KEY(id_direccion),
+CONSTRAINT FK_DIRECCION_DEPARTAMENTO FOREIGN KEY (id_departamento_direccion) REFERENCES DEPARTAMENTO(id_departamento),
+CONSTRAINT FK_DIREECION_MUNICIPIO FOREIGN KEY (id_municipio_direccion) REFERENCES MUNICIPIOS(id_municipios)
+);
+CREATE TABLE PROVEEDOR(
+id_proveedor int not null,
+nombre_proveedor varchar(200)not null,
+nit_proveedor varchar(200) not null,
+id_telefono_proveedor int not null,
+id_categoria_proveedor int not null,
+id_estado_proveedor int not null,
+CONSTRAINT PK_PROVEEDOR PRIMARY KEY(id_proveedor),
+CONSTRAINT FK_PROVEEDOR_TELEFONO FOREIGN KEY(id_telefono_proveedor) REFERENCES TELEFONO(id_telefono),
+CONSTRAINT FK_PROVEEDOR_CATEGORIA FOREIGN KEY(id_categoria_proveedor) REFERENCES CATEGORIA(id_categoria),
+CONSTRAINT FK_PROVEEDOR_ESTADO FOREIGN KEY(id_estado_proveedor) REFERENCES ESTADO(id_estado)
+);
+CREATE TABLE DIRECCION_PROVEEDOR(
+id_direccion_proveedor int not null,
+id_proveedor_dp int not null,
+CONSTRAINT FK_ID_DIRECCION_PROVEEDOR FOREIGN KEY(id_direccion_proveedor) REFERENCES DIRECCIONES(id_direccion),
+CONSTRAINT FK_ID_PROVEEDOR_DP FOREIGN KEY(id_proveedor_dp) REFERENCES PROVEEDOR(id_proveedor)
+);
+CREATE TABLE  PERSONA(
+id_persona int not null,
+primer_nombre varchar(150)not null,
+segundo_nombre varchar(150),
+primer_apellido varchar(150) not null,
+segundo_apellido varchar(150) not null,
+email varchar(100)not null,
+edad int not null,
+genero char(1) not null,
+id_telefono_persona int not null,
+CONSTRAINT PK_PERSONA PRIMARY KEY(id_persona),
+CONSTRAINT FK_TELEFONO_PERSONA FOREIGN KEY(id_telefono_persona) REFERENCES TELEFONO(id_telefono)
+);
+CREATE TABLE DIRECCION_PERSONA(
+id_persona_dc int not null,
+id_direccion_persona int not null,
+CONSTRAINT FK_ID_PERSONA_DIRECCION FOREIGN KEY(id_persona_dc) REFERENCES PERSONA(id_persona),
+CONSTRAINT FK_ID_DIRECCION_PERSONA FOREIGN KEY(id_direccion_persona) REFERENCES DIRECCIONES(id_direccion)
+);
+CREATE TABLE USUARIOS(
+id_usuario int not null,
+nombre_usuario varchar(50)unique not null,
+clave_usuario varchar(25)not null,
+id_estado_usuario int not null,
+id_persona_usuario int not null,
+id_rol_usuario int not null,
+CONSTRAINT PK_USUARIO PRIMARY KEY(id_usuario),
+CONSTRAINT FK_USUARIO_ESTADO FOREIGN KEY(id_estado_usuario) REFERENCES ESTADO(id_estado),
+CONSTRAINT FK_USUARIO_PERSONA FOREIGN KEY(id_persona_usuario) REFERENCES PERSONA(id_persona),
+CONSTRAINT FK_USUARIO_ROL FOREIGN KEY(id_rol_usuario) REFERENCES ROL(id_rol)
+);
+create table ARTICULOS(
+id_articulo int not null,
+nombre_articulo varchar(200)not null,
+precio_articulo numeric(10,2) not null,
+id_categoria_articulo int not null,
+id_proveedor_arituclo int not null,
+CONSTRAINT PK_ARTICULOS PRIMARY KEY(id_articulo),
+CONSTRAINT FK_CATEGORIA_ARTICULOS FOREIGN KEY(id_categoria_articulo) REFERENCES CATEGORIA(id_categoria),
+CONSTRAINT FK_ID_PROVEEDOR_ARTICULOS FOREIGN KEY(id_proveedor_arituclo ) REFERENCES PROVEEDOR(id_proveedor)
+);
+CREATE TABLE TIPO_PAGO(
+id_tipo_pago int not null,
+tipo_pago varchar(200) not null,
+CONSTRAINT PK_TIPO_PAGO PRIMARY KEY(id_tipo_pago)
+); 
+CREATE TABLE TIPO_DOCUMENTO(
+id_documento int not null,
+nombre_documento varchar(100)not null,
+CONSTRAINT PK_TIPODOCUMENTO PRIMARY KEY (id_documento)
+);
+CREATE TABLE PEDIDO(
+id_pedido int not null,
+fecha_pedido date,
+fecha_envio date,
+monto_total numeric(10,2)not null,
+id_estado_pedido int not null,
+id_usuario_pedido int not null,
+id_tipoPago_pedido int not null,
+id_documento_pedido int not null,
+CONSTRAINT PK_PEDIDO PRIMARY KEY (id_pedido),
+CONSTRAINT FK_ESTADO_PEDIDO FOREIGN KEY(id_estado_pedido) REFERENCES ESTADO(id_estado), 
+CONSTRAINT FK_USUARIO_PEDIDO FOREIGN KEY(id_usuario_pedido) REFERENCES USUARIOS(id_usuario),
+CONSTRAINT FK_TIPOPAGO_PEDIDO FOREIGN KEY(id_tipoPago_pedido ) REFERENCES TIPO_PAGO (id_tipo_pago),
+CONSTRAINT FK_TIPODOCUMETO_PEDIDO FOREIGN KEY(id_documento_pedido ) REFERENCES TIPO_DOCUMENTO (id_documento)
+);
+CREATE TABLE DETALLE_PEDIDO(
+id_pedido_detalle int not null,
+id_articulo_detalle int not null,
+cantidad int not null,
+total_articulo numeric(10,2)not null,
+CONSTRAINT FK_IDENCABEZADO_PEDIDO FOREIGN KEY(id_pedido_detalle ) REFERENCES PEDIDO (id_pedido),
+CONSTRAINT FK_IDEARTICULO_PEDIDO FOREIGN KEY(id_articulo_detalle ) REFERENCES ARTICULOS (id_articulo)
+);
