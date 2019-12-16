@@ -39,10 +39,8 @@ CONSTRAINT PK_CATEGORIA PRIMARY KEY (id_categoria)
 CREATE TABLE DIRECCIONES(
 id_direccion int not null,
 direccion varchar(200)not null,
-id_departamento_direccion int not null,
 id_municipio_direccion int  not null,
 CONSTRAINT PK_DIRECCION PRIMARY KEY(id_direccion),
-CONSTRAINT FK_DIRECCION_DEPARTAMENTO FOREIGN KEY (id_departamento_direccion) REFERENCES DEPARTAMENTO(id_departamento),
 CONSTRAINT FK_DIREECION_MUNICIPIO FOREIGN KEY (id_municipio_direccion) REFERENCES MUNICIPIOS(id_municipios)
 );
 CREATE TABLE PROVEEDOR(
@@ -52,16 +50,12 @@ nit_proveedor varchar(200) not null,
 id_telefono_proveedor int not null,
 id_categoria_proveedor int not null,
 id_estado_proveedor int not null,
+id_direccion_proveedor int not null,
 CONSTRAINT PK_PROVEEDOR PRIMARY KEY(id_proveedor),
 CONSTRAINT FK_PROVEEDOR_TELEFONO FOREIGN KEY(id_telefono_proveedor) REFERENCES TELEFONO(id_telefono),
 CONSTRAINT FK_PROVEEDOR_CATEGORIA FOREIGN KEY(id_categoria_proveedor) REFERENCES CATEGORIA(id_categoria),
-CONSTRAINT FK_PROVEEDOR_ESTADO FOREIGN KEY(id_estado_proveedor) REFERENCES ESTADO(id_estado)
-);
-CREATE TABLE DIRECCION_PROVEEDOR(
-id_direccion_proveedor int not null,
-id_proveedor_dp int not null,
-CONSTRAINT FK_ID_DIRECCION_PROVEEDOR FOREIGN KEY(id_direccion_proveedor) REFERENCES DIRECCIONES(id_direccion),
-CONSTRAINT FK_ID_PROVEEDOR_DP FOREIGN KEY(id_proveedor_dp) REFERENCES PROVEEDOR(id_proveedor)
+CONSTRAINT FK_PROVEEDOR_ESTADO FOREIGN KEY(id_estado_proveedor) REFERENCES ESTADO(id_estado),
+CONSTRAINT FK_PROVEEDOR_DIRECCION FOREIGN KEY(id_direccion_proveedor) REFERENCES DIRECCIONES(id_direccion)
 );
 CREATE TABLE  PERSONA(
 id_persona int not null,
@@ -73,14 +67,10 @@ email varchar(100)not null,
 edad int not null,
 genero char(1) not null,
 id_telefono_persona int not null,
-CONSTRAINT PK_PERSONA PRIMARY KEY(id_persona),
-CONSTRAINT FK_TELEFONO_PERSONA FOREIGN KEY(id_telefono_persona) REFERENCES TELEFONO(id_telefono)
-);
-CREATE TABLE DIRECCION_PERSONA(
-id_persona_dc int not null,
 id_direccion_persona int not null,
-CONSTRAINT FK_ID_PERSONA_DIRECCION FOREIGN KEY(id_persona_dc) REFERENCES PERSONA(id_persona),
-CONSTRAINT FK_ID_DIRECCION_PERSONA FOREIGN KEY(id_direccion_persona) REFERENCES DIRECCIONES(id_direccion)
+CONSTRAINT PK_PERSONA PRIMARY KEY(id_persona),
+CONSTRAINT FK_PERSONA_TELEFONO FOREIGN KEY(id_telefono_persona) REFERENCES TELEFONO(id_telefono),
+CONSTRAINT FK_PERSONA_DIRECCION FOREIGN KEY(id_direccion_persona) REFERENCES DIRECCIONES(id_direccion)
 );
 CREATE TABLE USUARIOS(
 id_usuario int not null,
