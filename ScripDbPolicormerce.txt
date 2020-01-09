@@ -24,11 +24,6 @@ id_departamento_municipio int not null,
 CONSTRAINT PK_MUNICIPIO PRIMARY KEY (id_municipios),
 CONSTRAINT FK_DEPARTAMENTO FOREIGN KEY (id_departamento_municipio) REFERENCES DEPARTAMENTO(id_departamento)
 );
-CREATE TABLE TELEFONO(
-id_telefono int not null,
-telefono varchar(20) not null,
-CONSTRAINT id_telefono primary  key(id_telefono)
-);
 create table CATEGORIA(
 id_categoria int not null,
 nombre_categoria varchar(200)not null,
@@ -47,12 +42,11 @@ CREATE TABLE PROVEEDOR(
 id_proveedor int not null,
 nombre_proveedor varchar(200)not null,
 nit_proveedor varchar(200) not null,
-id_telefono_proveedor int not null,
+telefono_proveedor VARCHAR(25) not null,
 id_categoria_proveedor int not null,
 id_estado_proveedor int not null,
 id_direccion_proveedor int not null,
 CONSTRAINT PK_PROVEEDOR PRIMARY KEY(id_proveedor),
-CONSTRAINT FK_PROVEEDOR_TELEFONO FOREIGN KEY(id_telefono_proveedor) REFERENCES TELEFONO(id_telefono),
 CONSTRAINT FK_PROVEEDOR_CATEGORIA FOREIGN KEY(id_categoria_proveedor) REFERENCES CATEGORIA(id_categoria),
 CONSTRAINT FK_PROVEEDOR_ESTADO FOREIGN KEY(id_estado_proveedor) REFERENCES ESTADO(id_estado),
 CONSTRAINT FK_PROVEEDOR_DIRECCION FOREIGN KEY(id_direccion_proveedor) REFERENCES DIRECCIONES(id_direccion)
@@ -66,10 +60,9 @@ segundo_apellido varchar(150) not null,
 email varchar(100)not null,
 edad int not null,
 genero char(1) not null,
-id_telefono_persona int not null,
+telefono_persona int not null,
 id_direccion_persona int not null,
 CONSTRAINT PK_PERSONA PRIMARY KEY(id_persona),
-CONSTRAINT FK_PERSONA_TELEFONO FOREIGN KEY(id_telefono_persona) REFERENCES TELEFONO(id_telefono),
 CONSTRAINT FK_PERSONA_DIRECCION FOREIGN KEY(id_direccion_persona) REFERENCES DIRECCIONES(id_direccion)
 );
 CREATE TABLE USUARIOS(
@@ -88,6 +81,7 @@ create table ARTICULOS(
 id_articulo int not null,
 nombre_articulo varchar(200)not null,
 precio_articulo numeric(10,2) not null,
+imagen_articulo BLOB not null,              
 id_categoria_articulo int not null,
 id_proveedor_arituclo int not null,
 CONSTRAINT PK_ARTICULOS PRIMARY KEY(id_articulo),
