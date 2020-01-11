@@ -1,0 +1,16 @@
+------------------------------------------------
+AL INICIO DEL NOMBE DE QUE SE SE ESTARA CREANDO
+------------------------------------------------
+/*ESPECIFICACIONES DE LA DB*/
+SE = SECUENCIAS
+TT = TRIGGER
+SP = PROCEDIMIENTO ALMECENA
+VW = VISTAS
+FU = FUNCIONES
+------------------------------------------------
+/*PARA QUE PROCESO HARA EL SP*/
+-----------------------------------
+IN = INSERTAR
+DEL = ELIMINAR 
+UDP = ACTUALIZAR
+------------------------------
