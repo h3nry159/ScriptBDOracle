@@ -12,5 +12,5 @@ FU = FUNCIONES
 -----------------------------------
 IN = INSERTAR
 DEL = ELIMINAR 
-UDP = ACTUALIZAR
+UPD = ACTUALIZAR
 ------------------------------
