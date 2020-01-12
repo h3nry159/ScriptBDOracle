@@ -1,4 +1,0 @@
-ya se instalo apex
-chivo 
-ahorita tenes que configurar un user apex_user_public
-donde tenes el po
