@@ -27,7 +27,7 @@ CONSTRAINT FK_DEPARTAMENTO FOREIGN KEY (id_departamento_municipio) REFERENCES DE
 create table CATEGORIA(
 id_categoria int not null,
 nombre_categoria varchar(200)not null,
-descripcion varchar(200)not null,
+descripcion_categoria varchar(200)not null,
 codigo_categoria varchar(3)not null,
 CONSTRAINT PK_CATEGORIA PRIMARY KEY (id_categoria)
 );
@@ -83,7 +83,7 @@ nombre_articulo varchar(200)not null,
 precio_articulo numeric(10,2) not null,
 imagen_articulo BLOB not null,              
 id_categoria_articulo int not null,
-id_proveedor_arituclo int not null,
+id_proveedor_arituculo int not null,
 CONSTRAINT PK_ARTICULOS PRIMARY KEY(id_articulo),
 CONSTRAINT FK_CATEGORIA_ARTICULOS FOREIGN KEY(id_categoria_articulo) REFERENCES CATEGORIA(id_categoria),
 CONSTRAINT FK_ID_PROVEEDOR_ARTICULOS FOREIGN KEY(id_proveedor_arituclo ) REFERENCES PROVEEDOR(id_proveedor)
