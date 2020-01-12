@@ -1,6 +1,6 @@
 create table ESTADO(
 id_estado int not null,
-estado char not null,
+estado varchar(150) not null,
 descripcion_estado varchar(200) not null,
 cod_estado varchar(5) not null,
 CONSTRAINT PK_ESTADO primary key (id_estado)
