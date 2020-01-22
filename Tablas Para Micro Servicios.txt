@@ -1,0 +1,10 @@
+tabla persona (insertar,mostrar los datos)
+tabla direccion (insertar, devolver el id)
+tabla departamento(mostrar datos)
+tabla  municipios(mostrar datos)
+tabla usuarios(insetar, validar
+si existe, encriptar el pass),
+tabla articulos(mostrar la lista de articulos ),
+tabla para insertar el pedido, y  modificar el pedido 
+
+  
