@@ -9,12 +9,12 @@ create table ROL(
 id_rol int not null,
 tipo_rol varchar(50)not null,
 descripcion_rol varchar(200)not null,
-cod_rol varchar(5)not null,
 CONSTRAINT PK_ROL PRIMARY KEY(id_rol)
 );
 create table DEPARTAMENTO(
 id_departamento int not null,
 nombre_departamento varchar(200)not null,
+id_municipio reference id_municipios
 CONSTRAINT PK_DEPARTAMENTO PRIMARY KEY(id_departamento)
 );
 create table MUNICIPIOS(
@@ -38,26 +38,13 @@ id_municipio_direccion int  not null,
 CONSTRAINT PK_DIRECCION PRIMARY KEY(id_direccion),
 CONSTRAINT FK_DIREECION_MUNICIPIO FOREIGN KEY (id_municipio_direccion) REFERENCES MUNICIPIOS(id_municipios)
 );
-CREATE TABLE PROVEEDOR(
-id_proveedor int not null,
-nombre_proveedor varchar(200)not null,
-nit_proveedor varchar(200) not null,
-telefono_proveedor VARCHAR(25) not null,
-id_categoria_proveedor int not null,
-id_estado_proveedor int not null,
-id_direccion_proveedor int not null,
-CONSTRAINT PK_PROVEEDOR PRIMARY KEY(id_proveedor),
-CONSTRAINT FK_PROVEEDOR_CATEGORIA FOREIGN KEY(id_categoria_proveedor) REFERENCES CATEGORIA(id_categoria),
-CONSTRAINT FK_PROVEEDOR_ESTADO FOREIGN KEY(id_estado_proveedor) REFERENCES ESTADO(id_estado),
-CONSTRAINT FK_PROVEEDOR_DIRECCION FOREIGN KEY(id_direccion_proveedor) REFERENCES DIRECCIONES(id_direccion)
-);
+
 CREATE TABLE  PERSONA(
 id_persona int not null,
 primer_nombre varchar(150)not null,
 segundo_nombre varchar(150),
 primer_apellido varchar(150) not null,
 segundo_apellido varchar(150) not null,
-email varchar(100)not null,
 edad int not null,
 genero char(1) not null,
 telefono_persona int not null,
@@ -69,6 +56,8 @@ CREATE TABLE USUARIOS(
 id_usuario int not null,
 nombre_usuario varchar(50)unique not null,
 clave_usuario varchar(25)not null,
+email varchar(100)not null,
+image_perfil BLOB, 
 id_estado_usuario int not null,
 id_persona_usuario int not null,
 id_rol_usuario int not null,
@@ -81,12 +70,21 @@ create table ARTICULOS(
 id_articulo int not null,
 nombre_articulo varchar(200)not null,
 precio_articulo numeric(10,2) not null,
-imagen_articulo BLOB not null,              
+imagen_articulo BLOB not null,
+descripcion_articulo varchar(200) not null,              
 id_categoria_articulo int not null,
-id_proveedor_arituculo int not null,
 CONSTRAINT PK_ARTICULOS PRIMARY KEY(id_articulo),
-CONSTRAINT FK_CATEGORIA_ARTICULOS FOREIGN KEY(id_categoria_articulo) REFERENCES CATEGORIA(id_categoria),
-CONSTRAINT FK_ID_PROVEEDOR_ARTICULOS FOREIGN KEY(id_proveedor_arituclo ) REFERENCES PROVEEDOR(id_proveedor)
+CONSTRAINT FK_CATEGORIA_ARTICULOS FOREIGN KEY(id_categoria_articulo) REFERENCES CATEGORIA(id_categoria)
+);
+create table SERVICIOS(
+id_servicio int not null,
+nombre_servicio varchar(200)not null,
+precio_servicio numeric(10,2) not null,
+descripcion_servicio varchar(200) not null,
+imagen_servicio BLOB not null,              
+id_categoria_servicio int not null,
+CONSTRAINT PK_ARTICULOS PRIMARY KEY(id_servicio),
+CONSTRAINT FK_CATEGORIA_ARTICULOS FOREIGN KEY(id_categoria_servicio) REFERENCES CATEGORIA(id_categoria)
 );
 CREATE TABLE TIPO_PAGO(
 id_tipo_pago int not null,
