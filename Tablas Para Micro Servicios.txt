@@ -1,10 +1,34 @@
-tabla persona (insertar,mostrar los datos)
+tabla persona (insertar,mostrar los datos,devolver id )
 tabla direccion (insertar, devolver el id)
-tabla departamento(mostrar datos)
-tabla  municipios(mostrar datos)
-tabla usuarios(insetar, validar
+tabla departamento(mostrar datos)select
+tabla  municipios(mostrar datos)select 
+tabla usuarios(insetar, validar) login select 
 si existe, encriptar el pass),
-tabla articulos(mostrar la lista de articulos ),
+tabla articulos(mostrar la lista de articulos y servicios  ),
+tabla servicios
+tabla categoria 
 tabla para insertar el pedido, y  modificar el pedido 
-
+tabla detalle de pedido
+tabla profile
   
+
+quitar cosas de tablas 
+cod de rol 
+quitar el id de proveedor
+email al usuario
+
+proveedor en la nuca 
+
+servicios 
+
+datos 
+para el table espace
+
+schema
+dbpolicomerce
+
+user
+policomerce
+
+password
+policomerce

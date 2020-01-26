@@ -14,7 +14,6 @@ CONSTRAINT PK_ROL PRIMARY KEY(id_rol)
 create table DEPARTAMENTO(
 id_departamento int not null,
 nombre_departamento varchar(200)not null,
-id_municipio reference id_municipios
 CONSTRAINT PK_DEPARTAMENTO PRIMARY KEY(id_departamento)
 );
 create table MUNICIPIOS(
@@ -83,8 +82,8 @@ precio_servicio numeric(10,2) not null,
 descripcion_servicio varchar(200) not null,
 imagen_servicio BLOB not null,              
 id_categoria_servicio int not null,
-CONSTRAINT PK_ARTICULOS PRIMARY KEY(id_servicio),
-CONSTRAINT FK_CATEGORIA_ARTICULOS FOREIGN KEY(id_categoria_servicio) REFERENCES CATEGORIA(id_categoria)
+CONSTRAINT PK_SERVICIOS PRIMARY KEY(id_servicio),
+CONSTRAINT FK_CATEGORIA_SERVICIOS FOREIGN KEY(id_categoria_servicio) REFERENCES CATEGORIA(id_categoria)
 );
 CREATE TABLE TIPO_PAGO(
 id_tipo_pago int not null,
