@@ -49,7 +49,7 @@ genero char(1) not null,
 telefono_persona int not null,
 id_direccion_persona int not null,
 CONSTRAINT PK_PERSONA PRIMARY KEY(id_persona),
-CONSTRAINT FK_PERSONA_DIRECCION FOREIGN KEY(id_direccion_persona) REFERENCES DIRECCIONES(id_direccion)
+CONSTRAINT FK_PERSONA_DIRECCION FOREIGN KEY(id_direccion_persona) REFERENCES DIRECCIONES(id_direccion) on delete cascade
 );
 CREATE TABLE USUARIOS(
 id_usuario int not null,
@@ -62,7 +62,7 @@ id_persona_usuario int not null,
 id_rol_usuario int not null,
 CONSTRAINT PK_USUARIO PRIMARY KEY(id_usuario),
 CONSTRAINT FK_USUARIO_ESTADO FOREIGN KEY(id_estado_usuario) REFERENCES ESTADO(id_estado),
-CONSTRAINT FK_USUARIO_PERSONA FOREIGN KEY(id_persona_usuario) REFERENCES PERSONA(id_persona),
+CONSTRAINT FK_USUARIO_PERSONA FOREIGN KEY(id_persona_usuario) REFERENCES PERSONA(id_persona) on delete cascade,
 CONSTRAINT FK_USUARIO_ROL FOREIGN KEY(id_rol_usuario) REFERENCES ROL(id_rol)
 );
 create table ARTICULOS(
