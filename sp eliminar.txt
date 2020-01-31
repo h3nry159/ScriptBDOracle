@@ -1,3 +1,4 @@
+/*SERIA ACTUALIZAR*/
 create or replace PROCEDURE DEL_ESTADO 
 (IDESTADO in ESTADO.id_estado%TYPE )AS
 BEGIN
