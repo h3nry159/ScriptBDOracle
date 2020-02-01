@@ -13,4 +13,5 @@ FU = FUNCIONES
 IN = INSERTAR
 DEL = ELIMINAR 
 UPD = ACTUALIZAR
+SL = SELECCIONAR
 ------------------------------

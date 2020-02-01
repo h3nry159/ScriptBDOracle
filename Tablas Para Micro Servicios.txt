@@ -1,12 +1,12 @@
 tabla persona (insertar,mostrar los datos,devolver id )
 tabla direccion (insertar, devolver el id)
-tabla departamento(mostrar datos)select
-tabla  municipios(mostrar datos)select 
-tabla usuarios(insetar, validar) login select 
+tabla departamento(mostrar datos)select ya esta
+tabla  municipios(mostrar datos)select ya esta
+tabla usuarios(insetar, validar) login select ya esta 
 si existe, encriptar el pass),
-tabla articulos(mostrar la lista de articulos y servicios  ),
-tabla servicios
-tabla categoria 
+tabla articulos(mostrar la lista de articulos y servicios  ),ya esta los servicios desplegados x categorias
+tabla servicios 
+tabla categoria  ya esta partido x productos y servicios 
 tabla para insertar el pedido, y  modificar el pedido 
 tabla detalle de pedido
 tabla profile
