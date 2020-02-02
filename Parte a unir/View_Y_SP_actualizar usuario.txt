@@ -1,0 +1,73 @@
+create or replace PROCEDURE SP_ACTUALIZAR_DETALLE_USUARIO 
+(
+  v_primer_nombre IN varchar2,
+  v_segundo_nombre in VARCHAR2,
+  v_primer_apellido in VARCHAR2,
+  v_segundo_apellido in VARCHAR2,
+  v_edad in VARCHAR2,
+  v_genero in VARCHAR2,
+  v_telefono_persona in VARCHAR2,
+  v_nombre_usuario in VARCHAR2,
+  v_email in VARCHAR2,
+  v_direccion in VARCHAR2,
+  v_departamento in VARCHAR2,
+  v_municipio in VARCHAR2,
+  V_ID_USUARIO IN NUMBER, 
+  V_ID_PERSONA IN NUMBER, 
+  V_ID_DIRECCION IN NUMBER, 
+  V_ID_DEPARTAMENTO IN NUMBER, 
+  V_ID_MUNICIPIOS IN NUMBER
+) AS 
+BEGIN
+    if v_id_usuario is not null then
+        update usuarios
+        set nombre_usuario = v_nombre_usuario,
+        email = v_email
+        where id_usuario = v_id_usuario;
+    end if;
+    if v_id_persona is not null then
+        update persona
+        set primer_nombre = v_primer_nombre,
+        segundo_nombre = v_segundo_nombre,
+        primer_apellido = v_primer_apellido,
+        segundo_apellido = v_segundo_apellido,
+        edad = v_edad,
+        genero = v_genero,
+        telefono_persona = v_telefono_persona
+        where id_persona = V_ID_PERSONA;
+    end if;
+    if v_id_direccion is not null then
+        update direcciones
+        set direccion = v_direccion
+        where id_direccion = v_id_direccion;
+    end if;
+        
+    if v_id_municipios is not null then
+        update municipios
+        set nombre_municipios = v_municipio
+        where id_municipios = v_id_municipios;        
+    end if;
+    
+    if v_id_departamento is not null then
+        update departamento
+        set nombre_departamento = v_departamento
+        where id_departamento = v_id_departamento;
+    end if;
+ 
+
+END;
+
+
+----------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "DBPOLICOMERCE"."VW_DETALLE_USUARIO" ("ID_PERSONA", "PRIMER_NOMBRE", "SEGUNDO_NOMBRE", "PRIMER_APELLIDO", "SEGUNDO_APELLIDO", "TELEFONO_PERSONA", "EDAD", "GENERO", "ID_USUARIO", "EMAIL", "NOMBRE_USUARIO", "ID_DIRECCION", "DIRECCION", "ID_DEPARTAMENTO", "NOMBRE_DEPARTAMENTO", "ID_MUNICIPIOS", "NOMBRE_MUNICIPIOS") AS 
+  SELECT P.ID_PERSONA, P.PRIMER_NOMBRE, P.SEGUNDO_NOMBRE, P.PRIMER_APELLIDO , P.SEGUNDO_APELLIDO, P.TELEFONO_PERSONA, P.EDAD, P.GENERO, 
+  U.ID_USUARIO, U.EMAIL, U.NOMBRE_USUARIO,
+   D.ID_DIRECCION, D.DIRECCION, DP.ID_DEPARTAMENTO, DP.NOMBRE_DEPARTAMENTO, ID_MUNICIPIOS, M.NOMBRE_MUNICIPIOS
+  FROM USUARIOS U
+  INNER JOIN PERSONA P ON P.ID_PERSONA = U.ID_PERSONA_USUARIO AND U.ID_PERSONA_USUARIO = P.ID_PERSONA
+  INNER JOIN DIRECCIONES D ON D.ID_DIRECCION = P.ID_DIRECCION_PERSONA AND P.ID_DIRECCION_PERSONA = D.ID_DIRECCION
+  INNER JOIN MUNICIPIOS M ON M.ID_MUNICIPIOS = D.ID_MUNICIPIO_DIRECCION AND D.ID_MUNICIPIO_DIRECCION = M.ID_MUNICIPIOS
+  INNER JOIN DEPARTAMENTO DP ON DP.ID_DEPARTAMENTO = M.ID_DEPARTAMENTO_MUNICIPIO AND M.ID_DEPARTAMENTO_MUNICIPIO = DP.ID_DEPARTAMENTO
+  WHERE U.ID_PERSONA_USUARIO = P.ID_PERSONA
+;
