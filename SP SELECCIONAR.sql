@@ -142,3 +142,48 @@ EXCEPTION
     WHEN OTHERS THEN
          HTP.print(SQLERRM);
 end SL_LOGIN;
+
+create or replace procedure SL_ARTICULOS_TODOS
+AS 
+articulos_cursor SYS_REFCURSOR;
+ OPTION_NOT_FOUND EXCEPTION;
+begin 
+  savepoint prev;
+OPEN articulos_cursor FOR
+SELECT A.ID_ARTICULO AS CODIGO,BASE64ENCODE(A.IMAGEN_ARTICULO) AS IMAGEN,A.NOMBRE_ARTICULO AS NOMBRE,A.PRECIO_ARTICULO AS PRECIO,
+A.DESCRIPCION_ARTICULO AS DESCRIPCION,C.NOMBRE_CATEGORIA AS CATEGORIA
+FROM ARTICULOS A INNER JOIN CATEGORIA C ON A.ID_CATEGORIA_ARTICULO=C.ID_CATEGORIA;
+ 
+        APEX_JSON.open_object;
+        APEX_JSON.write('departamentos',articulos_cursor);
+    APEX_JSON.close_object;
+    COMMIT;
+EXCEPTION 
+    WHEN OPTION_NOT_FOUND THEN
+         HTP.print(SQLERRM);
+    WHEN OTHERS THEN
+         HTP.print(SQLERRM);
+end SL_ARTICULOS_TODOS;
+
+create or replace procedure SL_SERVICIO_TODOS
+AS 
+servicios_cursor SYS_REFCURSOR;
+ OPTION_NOT_FOUND EXCEPTION;
+begin 
+  savepoint prev;
+OPEN servicios_cursor FOR
+
+select s.ID_SERVICIO as codigo,BASE64ENCODE(s.IMAGEN_SERVICIO) as imagen,s.NOMBRE_SERVICIO as nombre,
+s.PRECIO_SERVICIO as precio,s.DESCRIPCION_SERVICIO as descripcion, c.NOMBRE_CATEGORIA as categoria 
+from SERVICIOS s inner join CATEGORIA c on c.ID_CATEGORIA=s.ID_CATEGORIA_SERVICIO;
+ 
+      APEX_JSON.open_object;
+      APEX_JSON.write('departamentos',servicios_cursor);
+    APEX_JSON.close_object;
+    COMMIT;
+EXCEPTION 
+    WHEN OPTION_NOT_FOUND THEN
+         HTP.print(SQLERRM);
+    WHEN OTHERS THEN
+         HTP.print(SQLERRM);
+end SL_SERVICIO_TODOS;
