@@ -1,0 +1,28 @@
+/*RETOAN MAXIMO DE DIRECCION*/
+CREATE OR REPLACE  FUNCTION MaxDireccion
+  RETURN SYS_REFCURSOR
+IS
+  l_max SYS_REFCURSOR;
+  max_cursor SYS_REFCURSOR;
+BEGIN
+  savepoint prev;
+OPEN max_cursor FOR
+SELECT MAX(ID_DIRECCION) AS MAXIMO FROM DIRECCIONES;
+    l_max := max_cursor;
+  RETURN l_max;
+END;
+
+/*RETORNA MAXIMO DE PERSONA*/
+
+CREATE OR REPLACE  FUNCTION MaxPersona
+  RETURN SYS_REFCURSOR
+IS
+  l_max SYS_REFCURSOR;
+  max_cursor SYS_REFCURSOR;
+BEGIN
+  savepoint prev;
+OPEN max_cursor FOR
+SELECT MAX(ID_PERSONA) AS PP FROM PERSONA;
+    l_max := max_cursor;
+  RETURN l_max;
+END;
