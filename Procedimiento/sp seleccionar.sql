@@ -82,50 +82,8 @@ EXCEPTION
          HTP.print(SQLERRM);
 end SL_CATEGORIAS_SERVICIOS;
 
-create or replace procedure SL_LOGIN(USUARIO IN USUARIOS.nombre_usuario%type,CLAVE IN USUARIOS.clave_usuario%type)
-AS 
-login_cursor SYS_REFCURSOR;
- OPTION_NOT_FOUND EXCEPTION;
-begin 
-  savepoint prev;
-  
-OPEN login_cursor FOR
 
-SELECT U.ID_USUARIO AS CODIGO,U.NOMBRE_USUARIO AS nombre from USUARIOS U 
-where U.NOMBRE_USUARIO=USUARIO AND U.CLAVE_USUARIO=CLAVE;
 
-  APEX_JSON.open_object;
-        APEX_JSON.write('login', login_cursor);
-    APEX_JSON.close_object;
-    COMMIT;
-EXCEPTION 
-    WHEN OPTION_NOT_FOUND THEN
-         HTP.print(SQLERRM);
-    WHEN OTHERS THEN
-         HTP.print(SQLERRM);
-end SL_LOGIN;
-
-create or replace procedure SL_ARTICULOS_TODOS
-AS 
-articulos_cursor SYS_REFCURSOR;
- OPTION_NOT_FOUND EXCEPTION;
-begin 
-  savepoint prev;
-OPEN articulos_cursor FOR
-SELECT A.ID_ARTICULO AS CODIGO,BASE64ENCODE(A.IMAGEN_ARTICULO) AS IMAGEN,A.NOMBRE_ARTICULO AS NOMBRE,A.PRECIO_ARTICULO AS PRECIO,
-A.DESCRIPCION_ARTICULO AS DESCRIPCION,C.NOMBRE_CATEGORIA AS CATEGORIA
-FROM ARTICULOS A INNER JOIN CATEGORIA C ON A.ID_CATEGORIA_ARTICULO=C.ID_CATEGORIA;
- 
-        APEX_JSON.open_object;
-        APEX_JSON.write('departamentos',articulos_cursor);
-    APEX_JSON.close_object;
-    COMMIT;
-EXCEPTION 
-    WHEN OPTION_NOT_FOUND THEN
-         HTP.print(SQLERRM);
-    WHEN OTHERS THEN
-         HTP.print(SQLERRM);
-end SL_ARTICULOS_TODOS;
 
 create or replace procedure SL_SERVICIO_TODOS
 AS 
