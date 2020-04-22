@@ -1,48 +1,5 @@
 
-create or replace PROCEDURE SL_ARTICULOS(idcategori IN ARTICULOS.id_articulo%type)
-AS 
-articulos_cursor SYS_REFCURSOR;
-respuesta EXCEPTION;
-BEGIN
-SAVEPOINT prev;
-OPEN articulos_cursor FOR
-SELECT AR.ID_ARTICULO AS CODIGO,AR.NOMBRE_ARTICULO AS NOMBRE,AR.PRECIO_ARTICULO AS PRECIO,
-BASE64ENCODE(AR.IMAGEN_ARTICULO) AS imagen,AR.DESCRIPCION_ARTICULO as descripcion FROM  ARTICULOS AR  
-WHERE AR.ID_CATEGORIA_ARTICULO =idcategori;
 
- APEX_JSON.open_object;
-        APEX_JSON.write('ARTICULOS', articulos_cursor);
-    APEX_JSON.close_object;
-COMMIT;
-EXCEPTION
-WHEN respuesta then
-    HTP.print(SQLERRM);
-    WHEN OTHERS THEN
-    HTP.print(SQLERRM);
-END SL_ARTICULOS;
-
-create or replace PROCEDURE SL_SERVICIOS(idcategoria IN SERVICIOS.ID_CATEGORIA_SERVICIO%type)
-AS
-servicios_cursor SYS_REFCURSOR;
-respuesta EXCEPTION;
-BEGIN
-SAVEPOINT prev;
-OPEN servicios_cursor FOR
-
-select se.ID_SERVICIO as codigo,se.NOMBRE_SERVICIO as nombre,se.PRECIO_SERVICIO as precio,
-se.DESCRIPCION_SERVICIO as descripcion,BASE64ENCODE(se.IMAGEN_SERVICIO) as imagen from  SERVICIOS se
-where se.ID_CATEGORIA_SERVICIO=idcategoria;
-
- APEX_JSON.open_object;
-        APEX_JSON.write('servicios', servicios_cursor);
-    APEX_JSON.close_object;
-COMMIT;
-EXCEPTION
-WHEN respuesta then
-    HTP.print(SQLERRM);
-    WHEN OTHERS THEN
-    HTP.print(SQLERRM);
-END SL_SERVICIOS;
 
 create or replace procedure SL_CATEGORIAS_ARTICULOS
 AS 
