@@ -97,6 +97,7 @@ CONSTRAINT PK_TIPODOCUMENTO PRIMARY KEY (id_documento)
 );
 CREATE TABLE PEDIDO(
 id_pedido int not null,
+codigo_pedido varchar(6),
 fecha_pedido date,
 fecha_envio date,
 monto_total numeric(10,2)not null,
