@@ -119,5 +119,15 @@ cantidad int not null,
 total_articulo numeric(10,2)not null,
 PRECIO numeric(6,2),
 CONSTRAINT FK_IDENCABEZADO_PEDIDO FOREIGN KEY(id_pedido_detalle ) REFERENCES PEDIDO (id_pedido),
-CONSTRAINT FK_IDEARTICULO_PEDIDO FOREIGN KEY(id_articulo_detalle ) REFERENCES ARTICULOS (id_articulo)
+CONSTRAINT FK_IDEARTICULO_PEDIDO FOREIGN KEY(id_articulo_detalle ) REFERENCES ARTICULOS (id_articulo),
+);
+
+CREATE TABLE DETALLE_PEDIDO_SERVICIOS(
+id_pedido_detalle int not null,
+id_articulo_detalle int not null,
+cantidad int not null,
+total_articulo numeric(10,2)not null,
+PRECIO numeric(6,2),
+CONSTRAINT FK_IDENCABEZADO_SERVICIOS FOREIGN KEY(id_pedido_detalle ) REFERENCES PEDIDO (id_pedido),
+CONSTRAINT FK_IDEARTICULO_SERVICIOS FOREIGN KEY(id_articulo_detalle ) REFERENCES ARTICULOS (id_articulo)
 );
