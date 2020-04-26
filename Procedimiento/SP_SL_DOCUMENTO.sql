@@ -1,0 +1,21 @@
+create or replace procedure SP_SL_DOCUMENTO
+
+AS 
+pedido_cursor SYS_REFCURSOR;
+ OPTION_NOT_FOUND EXCEPTION;
+begin 
+  savepoint prev;
+
+OPEN pedido_cursor FOR
+
+SELECT TD.ID_DOCUMENTO AS CODIGO,TD.NOMBRE_DOCUMENTO AS NOMBRE FROM TIPO_DOCUMENTO TD;
+
+ APEX_JSON.write(pedido_cursor);
+
+    COMMIT;
+EXCEPTION 
+    WHEN OPTION_NOT_FOUND THEN
+         HTP.print(SQLERRM);
+    WHEN OTHERS THEN
+         HTP.print(SQLERRM);
+end SP_SL_DOCUMENTO;
