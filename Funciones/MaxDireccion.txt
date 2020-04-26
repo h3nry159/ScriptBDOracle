@@ -1,0 +1,11 @@
+create or replace FUNCTION MaxDireccion
+  RETURN NUMERIC
+IS
+  l_max NUMERIC;
+
+BEGIN
+
+SELECT MAX(ID_DIRECCION) AS DD into l_max FROM DIRECCIONES;
+
+  RETURN l_max;
+END;

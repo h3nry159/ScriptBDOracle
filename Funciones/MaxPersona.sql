@@ -1,0 +1,11 @@
+create or replace FUNCTION MaxPersona
+  RETURN NUMERIC
+IS
+  l_max NUMERIC;
+
+BEGIN
+
+SELECT MAX(ID_PERSONA) AS PP INTO l_max FROM PERSONA;
+
+  RETURN l_max;
+END;
