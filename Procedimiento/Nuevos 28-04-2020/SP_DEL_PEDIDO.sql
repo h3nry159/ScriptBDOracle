@@ -1,0 +1,18 @@
+create or replace PROCEDURE SP_DEL_PEDIDO(IDPE IN PEDIDO.ID_PEDIDO%TYPE)
+AS
+respuesta EXCEPTION;
+BEGIN
+SAVEPOINT prev;
+
+UPDATE PEDIDO SET ID_ESTADO_PEDIDO = '6' where ID_PEDIDO=IDPE;
+
+APEX_JSON.open_object;
+APEX_JSON.write('Status', '200');
+APEX_JSON.close_object;
+COMMIT;
+EXCEPTION
+WHEN respuesta then
+    HTP.print(SQLERRM);
+    WHEN OTHERS THEN
+    HTP.print(SQLERRM);
+END SP_DEL_PEDIDO;
