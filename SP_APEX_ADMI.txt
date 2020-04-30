@@ -1,0 +1,261 @@
+Vistas
+------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "DBPOLICOMERCE"."VW_DETALLE_USUARIO" ("ID_PERSONA", "PRIMER_NOMBRE", "SEGUNDO_NOMBRE", "PRIMER_APELLIDO", "SEGUNDO_APELLIDO", "TELEFONO_PERSONA", "EDAD", "GENERO", "ID_USUARIO", "EMAIL", "NOMBRE_USUARIO", "ID_DIRECCION", "DIRECCION", "ID_DEPARTAMENTO", "NOMBRE_DEPARTAMENTO", "ID_MUNICIPIOS", "NOMBRE_MUNICIPIOS") AS 
+  SELECT P.ID_PERSONA, P.PRIMER_NOMBRE, P.SEGUNDO_NOMBRE, P.PRIMER_APELLIDO , P.SEGUNDO_APELLIDO, P.TELEFONO_PERSONA, P.EDAD, P.GENERO, 
+  U.ID_USUARIO, U.EMAIL, U.NOMBRE_USUARIO,
+   D.ID_DIRECCION, D.DIRECCION, DP.ID_DEPARTAMENTO, DP.NOMBRE_DEPARTAMENTO, ID_MUNICIPIOS, M.NOMBRE_MUNICIPIOS
+  FROM USUARIOS U
+  INNER JOIN PERSONA P ON P.ID_PERSONA = U.ID_PERSONA_USUARIO AND U.ID_PERSONA_USUARIO = P.ID_PERSONA
+  INNER JOIN DIRECCIONES D ON D.ID_DIRECCION = P.ID_DIRECCION_PERSONA AND P.ID_DIRECCION_PERSONA = D.ID_DIRECCION
+  INNER JOIN MUNICIPIOS M ON M.ID_MUNICIPIOS = D.ID_MUNICIPIO_DIRECCION AND D.ID_MUNICIPIO_DIRECCION = M.ID_MUNICIPIOS
+  INNER JOIN DEPARTAMENTO DP ON DP.ID_DEPARTAMENTO = M.ID_DEPARTAMENTO_MUNICIPIO AND M.ID_DEPARTAMENTO_MUNICIPIO = DP.ID_DEPARTAMENTO
+  WHERE U.ID_PERSONA_USUARIO = P.ID_PERSONA
+;
+-------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "DBPOLICOMERCE"."VW_DETALLE_PEDIDO" ("ID_PEDIDO_DETALLE", "ID_ARTICULO_DETALLE", "CANTIDAD", "TOTAL_ARTICULO", "ID_PEDIDO", "FECHA_PEDIDO", "FECHA_ENVIO", "MONTO_TOTAL", "ID_ESTADO_PEDIDO", "ID_USUARIO_PEDIDO", "ID_ARTICULO", "NOMBRE_ARTICULO", "PRECIO_ARTICULO", "ID_TIPOPAGO_PEDIDO", "ID_DOCUMENTO_PEDIDO") AS 
+  select DP.ID_PEDIDO_DETALLE as ID_PEDIDO_DETALLE,
+    DP.ID_ARTICULO_DETALLE as ID_ARTICULO_DETALLE,
+    DP.CANTIDAD as CANTIDAD,
+    DP.TOTAL_ARTICULO as TOTAL_ARTICULO,
+    P.ID_PEDIDO as ID_PEDIDO,
+    P.FECHA_PEDIDO as FECHA_PEDIDO,
+    P.FECHA_ENVIO as FECHA_ENVIO,
+    P.MONTO_TOTAL as MONTO_TOTAL,
+    P.ID_ESTADO_PEDIDO as ID_ESTADO_PEDIDO,
+    P.ID_USUARIO_PEDIDO as ID_USUARIO_PEDIDO,
+    A.ID_ARTICULO as ID_ARTICULO,
+    A.NOMBRE_ARTICULO as NOMBRE_ARTICULO,
+    A.PRECIO_ARTICULO as PRECIO_ARTICULO,
+    P.ID_TIPOPAGO_PEDIDO as ID_TIPOPAGO_PEDIDO,
+    P.ID_DOCUMENTO_PEDIDO as ID_DOCUMENTO_PEDIDO 
+ from DETALLE_PEDIDO DP
+inner join PEDIDO P ON DP.ID_PEDIDO_DETALLE = P.ID_PEDIDO
+inner join ARTICULOS A ON DP.ID_ARTICULO_DETALLE = A.ID_ARTICULO;
+-------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "DBPOLICOMERCE"."VW_PRODUCTOS" ("CODIGO", "IMAGEN", "NOMBRE", "PRECIO", "DESCIPCION", "CATEGORIA") AS 
+  SELECT A.ID_ARTICULO AS CODIGO,A.IMAGEN_ARTICULO AS IMAGEN,A.NOMBRE_ARTICULO AS NOMBRE,
+A.PRECIO_ARTICULO AS PRECIO,A.DESCRIPCION_ARTICULO AS DESCIPCION,C.ID_CATEGORIA AS CATEGORIA
+FROM ARTICULOS A INNER JOIN CATEGORIA C ON C.ID_CATEGORIA=A.ID_CATEGORIA_ARTICULO;
+-------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "DBPOLICOMERCE"."VW_DATOS_PERSONA" ("DIRECCION", "ID_PERSONA", "PRIMER_NOMBRE", "SEGUNDO_NOMBRE", "PRIMER_APELLIDO", "SEGUNDO_APELLIDO", "EDAD", "GENERO", "TELEFONO_PERSONA", "ID_MUNICIPIO_DIRECCION") AS 
+  select DIRECCIONES.DIRECCION as DIRECCION,
+    PERSONA.ID_PERSONA as ID_PERSONA,
+    PERSONA.PRIMER_NOMBRE as PRIMER_NOMBRE,
+    PERSONA.SEGUNDO_NOMBRE as SEGUNDO_NOMBRE,
+    PERSONA.PRIMER_APELLIDO as PRIMER_APELLIDO,
+    PERSONA.SEGUNDO_APELLIDO as SEGUNDO_APELLIDO,
+    PERSONA.EDAD as EDAD,
+    PERSONA.GENERO as GENERO,
+    PERSONA.TELEFONO_PERSONA as TELEFONO_PERSONA, 
+    DIRECCIONES.ID_MUNICIPIO_DIRECCION as ID_MUNICIPIO_DIRECCION
+ from PERSONA PERSONA,
+    DIRECCIONES DIRECCIONES;
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "DBPOLICOMERCE"."TT_NUEVO_PERSONA" 
+    INSTEAD OF INSERT ON VW_DATOS_PERSONA
+    FOR EACH ROW
+DECLARE
+    l_id_direccion NUMBER;
+    l_id_persona NUMBER;
+    l_id_municipio NUMBER;
+BEGIN
+
+    --inserta direccion
+    INSERT INTO DIRECCIONES(DIRECCION, ID_MUNICIPIO_DIRECCION)
+    VALUES(:NEW.DIRECCION, :NEW.ID_MUNICIPIO_DIRECCION)
+    RETURNING ID_DIRECCION INTO l_id_direccion;
+    
+    --inserta persona
+    INSERT INTO PERSONA(PRIMER_NOMBRE, SEGUNDO_NOMBRE, EDAD, GENERO, TELEFONO_PERSONA, ID_DIRECCION_PERSONA)
+    VALUES(:NEW.PRIMER_NOMBRE, :NEW.SEGUNDO_NOMBRE, :NEW.EDAD, :NEW.GENERO, :NEW.TELEFONO_PERSONA, l_id_direccion)
+    RETURNING ID_PERSONA INTO l_id_persona;
+
+END;
+/
+ALTER TRIGGER "DBPOLICOMERCE"."TT_NUEVO_PERSONA" ENABLE;
+-------------------------------------------------------
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "DBPOLICOMERCE"."VW_CATEGORIAS" ("ID", "CODIGO", "NOMBRE", "DESCRIPCION") AS 
+  SELECT C.ID_CATEGORIA AS ID,C.CODIGO_CATEGORIA AS CODIGO,C.NOMBRE_CATEGORIA AS NOMBRE,
+C.DESCRIPCION_CATEGORIA AS DESCRIPCION
+FROM CATEGORIA C;
+-------------------------------------------------------create or replace TRIGGER TT_NUEVO_PERSONA
+    INSTEAD OF INSERT ON VW_DATOS_PERSONA
+    FOR EACH ROW
+DECLARE
+    l_id_direccion NUMBER;
+    l_id_persona NUMBER;
+    l_id_municipio NUMBER;
+BEGIN
+
+    --inserta direccion
+    INSERT INTO DIRECCIONES(DIRECCION, ID_MUNICIPIO_DIRECCION)
+    VALUES(:NEW.DIRECCION, :NEW.ID_MUNICIPIO_DIRECCION)
+    RETURNING ID_DIRECCION INTO l_id_direccion;
+    
+    --inserta persona
+    INSERT INTO PERSONA(PRIMER_NOMBRE, SEGUNDO_NOMBRE, EDAD, GENERO, TELEFONO_PERSONA, ID_DIRECCION_PERSONA)
+    VALUES(:NEW.PRIMER_NOMBRE, :NEW.SEGUNDO_NOMBRE, :NEW.EDAD, :NEW.GENERO, :NEW.TELEFONO_PERSONA, l_id_direccion)
+    RETURNING ID_PERSONA INTO l_id_persona;
+
+END;
+-------------------------------------------------------
+create or replace PROCEDURE SP_ACTUALIZAR_DETALLE_USUARIO 
+(
+  v_primer_nombre IN varchar2,
+  v_segundo_nombre in VARCHAR2,
+  v_primer_apellido in VARCHAR2,
+  v_segundo_apellido in VARCHAR2,
+  v_edad in VARCHAR2,
+  v_genero in VARCHAR2,
+  v_telefono_persona in VARCHAR2,
+  v_nombre_usuario in VARCHAR2,
+  v_email in VARCHAR2,
+  v_direccion in VARCHAR2,
+  v_departamento in VARCHAR2,
+  v_municipio in VARCHAR2,
+  V_ID_USUARIO IN NUMBER, 
+  V_ID_PERSONA IN NUMBER, 
+  V_ID_DIRECCION IN NUMBER, 
+  V_ID_DEPARTAMENTO IN NUMBER, 
+  V_ID_MUNICIPIOS IN NUMBER
+) AS 
+BEGIN
+    if v_id_usuario is not null then
+        update usuarios
+        set nombre_usuario = v_nombre_usuario,
+        email = v_email
+        where id_usuario = v_id_usuario;
+    end if;
+    if v_id_persona is not null then
+        update persona
+        set primer_nombre = v_primer_nombre,
+        segundo_nombre = v_segundo_nombre,
+        primer_apellido = v_primer_apellido,
+        segundo_apellido = v_segundo_apellido,
+        edad = v_edad,
+        genero = v_genero,
+        telefono_persona = v_telefono_persona
+        where id_persona = V_ID_PERSONA;
+    end if;
+    if v_id_direccion is not null then
+        update direcciones
+        set direccion = v_direccion
+        where id_direccion = v_id_direccion;
+    end if;
+        
+    if v_id_municipios is not null then
+        update municipios
+        set nombre_municipios = v_municipio
+        where id_municipios = v_id_municipios;        
+    end if;
+    
+    if v_id_departamento is not null then
+        update departamento
+        set nombre_departamento = v_departamento
+        where id_departamento = v_id_departamento;
+    end if;
+ 
+
+END;
+-------------------------------------------------------
+create or replace PROCEDURE SP_CREAR_PEDIDO 
+(
+  v_categoria IN NUMBER 
+, v_articulo IN NUMBER 
+, v_cantidad IN NUMBER 
+, v_fecha_pedido IN DATE 
+, v_fecha_envio IN DATE 
+, v_usuario IN NUMBER 
+, v_precio IN NUMBER
+, v_monto_total IN DECIMAL
+) AS 
+    l_id_pedido NUMBER;
+    
+BEGIN
+  --inserta pedido
+  
+  insert into pedido (fecha_pedido, fecha_envio, monto_total, id_estado_pedido, id_usuario_pedido, id_tipopago_pedido, id_documento_pedido)
+  values(v_fecha_pedido, v_fecha_envio, v_monto_total, 41, v_usuario, null, null)
+  RETURNING ID_PEDIDO INTO l_id_pedido;
+  
+  --inserta detalle_pedido
+  insert into detalle_pedido(id_pedido_detalle, id_articulo_detalle, cantidad, total_articulo)
+  values(l_id_pedido,v_articulo, v_cantidad, null);
+  
+END SP_CREAR_PEDIDO;
+
+-------------------------------------------------------
+create or replace procedure SP_NUEVO_USUARIO 
+(
+    V_PRIMER_NOMBRE IN PERSONA.PRIMER_NOMBRE%TYPE,
+    V_SEGUNDO_NOMBRE IN PERSONA.SEGUNDO_NOMBRE%TYPE,
+    V_PRIMER_APELLIDO IN PERSONA.PRIMER_APELLIDO%TYPE,
+    V_SEGUNDO_APELLIDO IN PERSONA.SEGUNDO_APELLIDO%TYPE,
+    V_TELEFONO_PERSONA IN PERSONA.TELEFONO_PERSONA%TYPE,
+    V_EDAD IN PERSONA.EDAD%TYPE,
+    V_SEXO IN PERSONA.GENERO%TYPE,
+    V_DIRECCION IN DIRECCIONES.DIRECCION%TYPE,
+    V_ID_MUNICIPIO IN MUNICIPIOS.ID_MUNICIPIOS%TYPE
+)
+AS
+    l_id_direccion NUMBER;
+    --l_id_municipio NUMBER;
+
+    BEGIN
+    
+      --  select id_departamento INTO l_id_municipio from departamento where id_municipio_departamento = V_ID_MUNICIPIO;
+        INSERT into direcciones (DIRECCION,ID_MUNICIPIO_DIRECCION) values (V_DIRECCION, V_ID_MUNICIPIO)
+        RETURNING ID_DIRECCION INTO l_id_direccion;
+
+        INSERT INTO PERSONA (PRIMER_NOMBRE,
+                            SEGUNDO_NOMBRE,
+                            PRIMER_APELLIDO,
+                            SEGUNDO_APELLIDO,
+                            EDAD,
+                            GENERO,
+                            TELEFONO_PERSONA,
+                            ID_DIRECCION_PERSONA)
+                            VALUES (V_PRIMER_NOMBRE,
+                                    V_SEGUNDO_NOMBRE,
+                                    V_PRIMER_APELLIDO,
+                                    V_SEGUNDO_APELLIDO,
+                                    V_TELEFONO_PERSONA,
+                                    V_EDAD,
+                                    V_SEXO,
+                                    54);
+    
+
+            
+    END;
+-------------------------------------------------------
+create or replace PROCEDURE SP_UPDATE_PEDIDO 
+(
+  COD_PEDIDO IN NUMBER 
+, ENVIO IN DATE 
+, ESTADO_PEDIDO IN NUMBER 
+) AS 
+BEGIN
+  UPDATE PEDIDO SET FECHA_ENVIO = ENVIO, ID_ESTADO_PEDIDO = ESTADO_PEDIDO
+  WHERE ID_PEDIDO = COD_PEDIDO;
+END SP_UPDATE_PEDIDO;
+-------------------------------------------------------
+create or replace function "LOGIN_F"
+(p_username in VARCHAR2,
+p_password in VARCHAR2)
+return BOOLEAN
+is
+    N NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO N FROM USUARIOS 
+    WHERE (UPPER(NOMBRE_USUARIO) = p_username AND CLAVE_USUARIO = p_password AND ID_ESTADO_USUARIO=23 AND ID_ROL_USUARIO = 21) 
+    OR (UPPER(EMAIL) = p_username AND CLAVE_USUARIO = p_password AND ID_ESTADO_USUARIO=23 AND ID_ROL_USUARIO = 21);
+    IF N>0 THEN
+        return TRUE;
+    ELSE
+        return FALSE;
+    END IF;
+END;
