@@ -1,0 +1,9 @@
+create or replace FUNCTION  IdUserEstado
+  RETURN NUMERIC
+IS
+  l_id NUMERIC;
+
+BEGIN
+select id_estado as id INTO l_id from estado where ESTADO='Activo';
+  RETURN l_id;
+END;
