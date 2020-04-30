@@ -1,0 +1,9 @@
+create or replace FUNCTION  IdUserRolAdmin
+  RETURN NUMERIC
+IS
+  l_id NUMERIC;
+
+BEGIN
+select ID_ROL INTO l_id from rol where TIPO_ROL='Administrador';
+  RETURN l_id;
+END;
