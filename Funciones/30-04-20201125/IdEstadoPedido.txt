@@ -1,0 +1,9 @@
+create or replace FUNCTION  IdEstadoPedido
+  RETURN NUMERIC
+IS
+  l_id NUMERIC;
+
+BEGIN
+select ID_ESTADO into l_id  from ESTADO where ESTADO='En Progreso';
+  RETURN l_id;
+END;
