@@ -4,7 +4,7 @@ respuesta EXCEPTION;
 BEGIN
 SAVEPOINT prev;
 
-UPDATE PEDIDO SET ID_ESTADO_PEDIDO = '6' where ID_PEDIDO=IDPE;
+UPDATE PEDIDO SET ID_ESTADO_PEDIDO = IdEliminadoPedido where ID_PEDIDO=IDPE;
 
 APEX_JSON.open_object;
 APEX_JSON.write('Status', '200');
